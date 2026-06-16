@@ -1,0 +1,13 @@
+# robots.txt for meteorrejects.net
+# Allow all crawlers full access
+User-agent: *
+Allow: /
+
+# Crawl delay to be gentle on server (optional, adjust as needed)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://meteorrejects.net/sitemap.xml
+
+# Disallow nothing – all content is public
+Disallow:
